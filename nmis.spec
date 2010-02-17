@@ -1,7 +1,7 @@
 %define name	nmis
 %define version 2.00
 %define up_version %(echo %version | sed -e 's/\\./-/')
-%define release %mkrel 2
+%define release %mkrel 3
 
 Name:		%{name}
 Version:	%{version}
@@ -13,11 +13,10 @@ URL:		http://nmis.sourceforge.net/
 Source:     http://www.sins.com.au/public/%{name}-%{up_version}.tar.gz
 Patch0:     %{name}-2.00-fhs.patch
 Patch1:     %{name}-2.00-no-ksh.patch
-# webapp macros and scriptlets
-Requires(post):		rpm-helper >= 0.16
-Requires(postun):	rpm-helper >= 0.16
-BuildRequires:	rpm-helper >= 0.16
-BuildRequires:	rpm-mandriva-setup >= 1.23
+%if %mdkversion < 201010
+Requires(post):   rpm-helper
+Requires(postun):   rpm-helper
+%endif
 BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}
 
@@ -68,10 +67,11 @@ cat > %{buildroot}%{_webappconfdir}/%{name}.conf <<EOF
 Alias /%{name} %{_var}/www/%{name}
 
 <Directory %{_var}/www/%{name}>
+    Order allow,deny
+    Allow from all
     Options ExecCGI
     AddHandler cgi-script .pl
     DirectoryIndex nmiscgi.pl
-    Allow from all
 </Directory>
 EOF
 
@@ -79,10 +79,14 @@ EOF
 rm -rf %{buildroot}
 
 %post
+%if %mdkversion < 201010
 %_post_webapp
+%endif
 
 %postun
+%if %mdkversion < 201010
 %_postun_webapp
+%endif
 
 %files
 %defattr(-,root,root)
