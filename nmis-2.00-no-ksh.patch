@@ -1,0 +1,72 @@
+diff -Naur --exclude '*~' nmis-2-00-fhs/bin/dailyadmin.sh nmis-2-00-no-ksh/bin/dailyadmin.sh
+--- nmis-2-00-fhs/bin/dailyadmin.sh	2008-10-03 14:19:21.000000000 +0200
++++ nmis-2-00-no-ksh/bin/dailyadmin.sh	2008-10-03 14:51:18.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/ksh
++#!/bin/sh
+ 
+ # load the environment
+ #. /etc/profile
+diff -Naur --exclude '*~' nmis-2-00-fhs/bin/logrollover.sh nmis-2-00-no-ksh/bin/logrollover.sh
+--- nmis-2-00-fhs/bin/logrollover.sh	2008-10-03 14:24:23.000000000 +0200
++++ nmis-2-00-no-ksh/bin/logrollover.sh	2008-10-03 14:51:03.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/ksh
++#!/bin/sh
+ #
+ # This script will be run at end of month to create last months logs from the 
+ # current logs.  It simply copies the current log, then greps for instances of
+@@ -50,7 +50,7 @@
+ 
+ 
+ # check the command line arguements for options
+-if [ $1 = "cisco" ]
++if [ $1 == "cisco" ]
+ then
+ 	logdir=/data/nmis/log
+ 	logfile=cisco.log
+@@ -82,7 +82,7 @@
+ 		kill -HUP `cat /etc/syslog.pid`
+ 
+ 	fi
+-elif [ $1 = "event" ]
++elif [ $1 == "event" ]
+ then
+ 	# Do the Stats Event Log
+ 	logdir=/data/nmis/log
+@@ -112,7 +112,7 @@
+ 		echo "$newlog,$logdir/$newlog,$desc" >> $loglist
+ 
+ 	fi
+-elif [ $1 = "apache" ]
++elif [ $1 == "apache" ]
+ then
+ 	# Do the Apache Error Log
+ 	logdir=/var/log/httpd
+@@ -144,7 +144,7 @@
+ 		apachectl restart 1>/dev/null 2>/dev/null
+ 
+ 	fi
+-elif [ $1 = "nmis" ]
++elif [ $1 == "nmis" ]
+ then
+ 	# Do the Apache Error Log
+ 	logdir=/data/nmis/log
+diff -Naur --exclude '*~' nmis-2-00-fhs/bin/mibdump.sh nmis-2-00-no-ksh/bin/mibdump.sh
+--- nmis-2-00-fhs/bin/mibdump.sh	2008-10-03 14:23:36.000000000 +0200
++++ nmis-2-00-no-ksh/bin/mibdump.sh	2008-10-03 14:51:38.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/ksh
++#!/bin/sh
+ mibdir=/usr/share/snmp/mibs
+ outdir=/usr/share/nmis/mibs
+ 
+diff -Naur --exclude '*~' nmis-2-00-fhs/bin/run-reports.sh nmis-2-00-no-ksh/bin/run-reports.sh
+--- nmis-2-00-fhs/bin/run-reports.sh	2008-10-03 14:19:07.000000000 +0200
++++ nmis-2-00-no-ksh/bin/run-reports.sh	2008-10-03 14:51:28.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/ksh
++#!/bin/sh
+ cd /usr/share/nmis/bin
+ 
+ log=/var/log/nmis/reports.log

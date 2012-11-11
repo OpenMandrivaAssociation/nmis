@@ -1,0 +1,467 @@
+diff -Naur --exclude '*~' nmis-2-00/bin/logrollover.sh nmis-2-00-fhs/bin/logrollover.sh
+--- nmis-2-00/bin/logrollover.sh	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/bin/logrollover.sh	2008-10-03 14:24:23.000000000 +0200
+@@ -115,7 +115,7 @@
+ elif [ $1 = "apache" ]
+ then
+ 	# Do the Apache Error Log
+-	logdir=/usr/local/var/apache/log
++	logdir=/var/log/httpd
+ 	logfile=access_log
+ 	newlog=access-$year$month$day.log
+ 	desc="Apache Access log ending $year-$month-$day"
+diff -Naur --exclude '*~' nmis-2-00/bin/mibdump.pl nmis-2-00-fhs/bin/mibdump.pl
+--- nmis-2-00/bin/mibdump.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/bin/mibdump.pl	2008-10-03 14:21:57.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    mibdump.pl - NMIS CGI Program - Network Mangement Information System
+ #    Copyright (C) 2000 Sinclair InterNetworking Services Pty Ltd
+@@ -19,10 +19,7 @@
+ #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ #
+ #*****************************************************************************
+-# Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl"; 
++use lib "/usr/share/nmis/lib";
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+ 
+@@ -62,7 +59,7 @@
+         }
+ }
+ 
+-if ( $argue{mibdir} eq "" ) { $argue{mibdir} = "/usr/local/share/snmp/mibs"; }
++if ( $argue{mibdir} eq "" ) { $argue{mibdir} = "/usr/share/snmp/mibs"; }
+ 
+ # Always load the default mib
+ SNMP_MIB::loadmib($argue{mibdir}, "RFC1213-MIB.my");
+diff -Naur --exclude '*~' nmis-2-00/bin/mibdump.sh nmis-2-00-fhs/bin/mibdump.sh
+--- nmis-2-00/bin/mibdump.sh	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/bin/mibdump.sh	2008-10-03 14:23:36.000000000 +0200
+@@ -1,8 +1,8 @@
+ #!/usr/bin/ksh
+-mibdir=/usr/local/share/snmp/mibs
+-outdir=/usr/local/nmis/mibs
++mibdir=/usr/share/snmp/mibs
++outdir=/usr/share/nmis/mibs
+ 
+-/data/nmis/bin/mibdump.pl mibdir=$mibdir mibs=standard outfile=$outdir/standard.oid
+-/data/nmis/bin/mibdump.pl mibdir=$mibdir mibs=server outfile=$outdir/server.oid
+-/data/nmis/bin/mibdump.pl mibdir=$mibdir mibs=switch outfile=$outdir/cisco-switch.oid
+-/data/nmis/bin/mibdump.pl mibdir=$mibdir mibs=router outfile=$outdir/cisco-router.oid
++/usr/share/nmis/bin/mibdump.pl mibdir=$mibdir mibs=standard outfile=$outdir/standard.oid
++/usr/share/nmis/bin/mibdump.pl mibdir=$mibdir mibs=server outfile=$outdir/server.oid
++/usr/share/nmis/bin/mibdump.pl mibdir=$mibdir mibs=switch outfile=$outdir/cisco-switch.oid
++/usr/share/nmis/bin/mibdump.pl mibdir=$mibdir mibs=router outfile=$outdir/cisco-router.oid
+diff -Naur --exclude '*~' nmis-2-00/bin/nmis.pl nmis-2-00-fhs/bin/nmis.pl
+--- nmis-2-00/bin/nmis.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/bin/nmis.pl	2008-10-03 14:20:52.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    nmis.pl - NMIS Perl Program - Network Mangement Information System
+ #    Copyright (C) 2000 Sinclair InterNetworking Services Pty Ltd
+@@ -20,9 +20,7 @@
+ #
+ #*****************************************************************************
+ # Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl"; 
++use lib "/usr/share/nmis/lib";
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+ # best to customise in the nmis.conf file.
+@@ -91,7 +89,7 @@
+ my $conf;
+ if ( $nvp{file} ne "" ) { $conf = $nvp{file}; }
+ else { $conf = "nmis.conf"; }
+-my $configfile = "$FindBin::Bin/../conf/$conf";
++my $configfile = "/etc/nmis/$conf";
+ if ( -f $configfile ) { loadConfiguration($configfile); }
+ else { die "Can't access configuration file $configfile.\n"; }
+ 
+@@ -2536,4 +2534,4 @@
+ 
+ EO_TEXT
+ 	}
+-}	
+\ Pas de fin de ligne à la fin du fichier.
++}	
+diff -Naur --exclude '*~' nmis-2-00/bin/reports.pl nmis-2-00-fhs/bin/reports.pl
+--- nmis-2-00/bin/reports.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/bin/reports.pl	2008-10-03 14:18:42.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    reports.pl - NMIS Perl Program - Network Mangement Information System
+ #    Copyright (C) 2000 Sinclair InterNetworking Services Pty Ltd
+@@ -20,9 +20,7 @@
+ #
+ #*****************************************************************************
+ # Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl"; 
++use lib "/usr/share/nmis/lib";
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+ 
+@@ -59,7 +57,7 @@
+ my $conf;
+ if ( $nvp{file} ne "" ) { $conf = $nvp{file}; }
+ else { $conf = "nmis.conf"; }
+-my $configfile = "$FindBin::Bin/../conf/$conf";
++my $configfile = "/etc/nmis/$conf";
+ if ( -f $configfile ) { loadConfiguration($configfile); }
+ else { die "Can't access configuration file $configfile.\n"; }
+ 
+diff -Naur --exclude '*~' nmis-2-00/bin/run-reports.sh nmis-2-00-fhs/bin/run-reports.sh
+--- nmis-2-00/bin/run-reports.sh	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/bin/run-reports.sh	2008-10-03 14:19:07.000000000 +0200
+@@ -1,9 +1,8 @@
+ #!/usr/bin/ksh
+-export PATH=/usr/bin:/usr/sbin:/usr/ucb:/usr/local/bin:/usr/local/nmis/bin
+-cd /usr/local/nmis/bin
++cd /usr/share/nmis/bin
+ 
+-log=/usr/local/nmis/log/reports.log
+-reportdir=/usr/local/nmis/htdocs/reports
++log=/var/log/nmis/reports.log
++reportdir=/var/lib/nmis/reports
+ 
+ # set the date parameters
+ year=`date | awk '{print $6}'`
+diff -Naur --exclude '*~' nmis-2-00/bin/traplog.pl nmis-2-00-fhs/bin/traplog.pl
+--- nmis-2-00/bin/traplog.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/bin/traplog.pl	2008-10-03 14:18:42.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ 
+ use strict;
+ 
+diff -Naur --exclude '*~' nmis-2-00/cgi-bin/admin.pl nmis-2-00-fhs/cgi-bin/admin.pl
+--- nmis-2-00/cgi-bin/admin.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/cgi-bin/admin.pl	2008-10-03 14:31:18.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    admin.pl - NMIS Perl Program - Network Mangement Information System
+ #    Copyright (C) 2000 Sinclair InterNetworking Services Pty Ltd
+@@ -19,12 +19,9 @@
+ #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ #
+ #*****************************************************************************
+-# Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
++use lib "/usr/share/nmis/lib";
+ 
+-my $configfile = "$FindBin::Bin/nmis.conf";
+-$configfile =~ s/bin|cgi-bin/conf/;
++my $configfile = "/etc/nmis/nmis.conf";
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+ 
+@@ -213,11 +210,11 @@
+ 		cellStart("#FFFFFF",7);
+ 
+ 			if ( $action eq "add" ) {
+-				$command = "/usr/local/bin/sudo /usr/sbin/useradd -c \"$firstname $surname\" -d /export/home/$newuser -g $group -s /usr/bin/ksh $newuser";
++				$command = "/usr/bin/sudo /usr/sbin/useradd -c \"$firstname $surname\" -d /export/home/$newuser -g $group -s /usr/bin/ksh $newuser";
+ 
+ 			}
+ 			elsif ( $action eq "delete" ) {
+-				$command = "/usr/local/bin/sudo /usr/sbin/userdel $username";
++				$command = "/usr/bin/sudo /usr/sbin/userdel $username";
+ 			}
+ 			
+ 			if ( $makeitso eq "true" ) {
+diff -Naur --exclude '*~' nmis-2-00/cgi-bin/cgi-env.pl nmis-2-00-fhs/cgi-bin/cgi-env.pl
+--- nmis-2-00/cgi-bin/cgi-env.pl	2001-06-23 03:35:29.000000000 +0200
++++ nmis-2-00-fhs/cgi-bin/cgi-env.pl	2008-10-03 14:18:46.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    cgi-env.pl - CGI Environment Program 
+ #    Copyright (C) 2000,2001 Sinclair InterNetworking Services Pty Ltd
+diff -Naur --exclude '*~' nmis-2-00/cgi-bin/event.pl nmis-2-00-fhs/cgi-bin/event.pl
+--- nmis-2-00/cgi-bin/event.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/cgi-bin/event.pl	2008-10-03 14:25:39.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    query.pl - NMIS CGI Program - Network Mangement Information System
+ #    Copyright (C) 2001 Keith Sinclair <keith@sinclair.org.au>
+@@ -18,13 +18,9 @@
+ #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ #
+ #*****************************************************************************
+-# Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl"; 
++use lib "/usr/share/nmis/lib";
+ 
+-my $configfile = "$FindBin::Bin/nmis.conf";
+-$configfile =~ s/bin|cgi-bin/conf/;
++my $configfile = "/etc/nmis/nmis.conf";
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+ 
+diff -Naur --exclude '*~' nmis-2-00/cgi-bin/ip.pl nmis-2-00-fhs/cgi-bin/ip.pl
+--- nmis-2-00/cgi-bin/ip.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/cgi-bin/ip.pl	2008-10-03 14:44:59.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    ip.pl - NMIS IP Subnetting Program - Network Mangement Information System
+ #    Copyright (C) 2000 Sinclair InterNetworking Services Pty Ltd
+@@ -19,9 +19,7 @@
+ #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ #
+ #*****************************************************************************
+-# Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
++use lib "/usr/share/nmis/lib";
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+ 
+diff -Naur --exclude '*~' nmis-2-00/cgi-bin/logs.pl nmis-2-00-fhs/cgi-bin/logs.pl
+--- nmis-2-00/cgi-bin/logs.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/cgi-bin/logs.pl	2008-10-03 14:26:28.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    logs.pl - NMIS CGI Program - Network Mangement Information System
+ #    Copyright (C) 2000 Sinclair InterNetworking Services Pty Ltd
+@@ -20,9 +20,7 @@
+ #
+ #*****************************************************************************
+ # Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl"; 
++use lib "/usr/share/nmis/lib";
+ 
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+@@ -52,7 +50,7 @@
+ my $conf;
+ if ( $FORM{file} ne "" ) { $conf = $FORM{file}; }
+ else { $conf = "nmis.conf"; }
+-my $configfile = "$FindBin::Bin/../conf/$conf";
++my $configfile = "/etc/nmis/$conf";
+ if ( -f $configfile ) { loadConfiguration($configfile); }
+ else { die "Can't access configuration file $configfile.\n"; }
+ 
+diff -Naur --exclude '*~' nmis-2-00/cgi-bin/map.pl nmis-2-00-fhs/cgi-bin/map.pl
+--- nmis-2-00/cgi-bin/map.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/cgi-bin/map.pl	2008-10-03 14:30:18.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    summary.pl - NMIS CGI Program - Network Mangement Information System
+ #    Copyright (C) 2001 Keith Sinclair <keith@sinclair.org.au>
+@@ -18,10 +18,7 @@
+ #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ #
+ #*****************************************************************************
+-# Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl"; 
++use lib "/usr/share/nmis/lib";
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+ 
+@@ -44,7 +41,7 @@
+ my $conf;
+ if ( $FORM{file} ne "" ) { $conf = $FORM{file}; }
+ else { $conf = "nmis.conf"; }
+-my $configfile = "$FindBin::Bin/../conf/$conf";
++my $configfile = "/etc/nmis/$conf";
+ if ( -f $configfile ) { loadConfiguration($configfile); }
+ else { die "Can't access configuration file $configfile.\n"; }
+ 
+diff -Naur --exclude '*~' nmis-2-00/cgi-bin/metrics.pl nmis-2-00-fhs/cgi-bin/metrics.pl
+--- nmis-2-00/cgi-bin/metrics.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/cgi-bin/metrics.pl	2008-10-03 14:27:46.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    metrics.pl - NMIS CGI Program - Network Mangement Information System
+ #    Copyright (C) 2001 Keith Sinclair <keith@sinclair.org.au>
+@@ -18,13 +18,9 @@
+ #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ #
+ #*****************************************************************************
+-# Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl"; 
++use lib "/usr/share/nmis/lib";
+ 
+-my $configfile = "$FindBin::Bin/nmis.conf";
+-$configfile =~ s/bin|cgi-bin/conf/;
++my $configfile = "/etc/nmis/nmis.conf";
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+ 
+diff -Naur --exclude '*~' nmis-2-00/cgi-bin/nmiscgi.pl nmis-2-00-fhs/cgi-bin/nmiscgi.pl
+--- nmis-2-00/cgi-bin/nmiscgi.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/cgi-bin/nmiscgi.pl	2008-10-03 14:27:01.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    nmiscgi.pl - NMIS CGI Program - Network Mangement Information System
+ #    Copyright (C) 2000,2001 Sinclair InterNetworking Services Pty Ltd
+@@ -19,10 +19,7 @@
+ #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ #
+ #*****************************************************************************
+-# Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl"; 
++use lib "/usr/share/nmis/lib";
+ 
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+@@ -66,7 +63,7 @@
+ my $conf;
+ if ( $FORM{file} ne "" ) { $conf = $FORM{file}; }
+ else { $conf = "nmis.conf"; }
+-my $configfile = "$FindBin::Bin/../conf/$conf";
++my $configfile = "/etc/nmis/$conf";
+ if ( -f $configfile ) { loadConfiguration($configfile); }
+ else { die "Can't access configuration file $configfile.\n"; }
+ 
+diff -Naur --exclude '*~' nmis-2-00/cgi-bin/query.pl nmis-2-00-fhs/cgi-bin/query.pl
+--- nmis-2-00/cgi-bin/query.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/cgi-bin/query.pl	2008-10-03 14:29:40.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    query.pl - NMIS CGI Program - Network Mangement Information System
+ #    Copyright (C) 2001 Keith Sinclair <keith@sinclair.org.au>
+@@ -18,13 +18,9 @@
+ #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ #
+ #*****************************************************************************
+-# Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl"; 
++use lib "/usr/share/nmis/lib";
+ 
+-my $configfile = "$FindBin::Bin/nmis.conf";
+-$configfile =~ s/bin|cgi-bin/conf/;
++my $configfile = "/etc/nmis/nmis.conf";
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+ 
+diff -Naur --exclude '*~' nmis-2-00/cgi-bin/summary.pl nmis-2-00-fhs/cgi-bin/summary.pl
+--- nmis-2-00/cgi-bin/summary.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/cgi-bin/summary.pl	2008-10-03 14:29:16.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    summary.pl - NMIS CGI Program - Network Mangement Information System
+ #    Copyright (C) 2001 Keith Sinclair <keith@sinclair.org.au>
+@@ -18,10 +18,7 @@
+ #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ #
+ #*****************************************************************************
+-# Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl"; 
++use lib "/usr/share/nmis/lib";
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+ 
+@@ -43,7 +40,7 @@
+ my $conf;
+ if ( $FORM{file} ne "" ) { $conf = $FORM{file}; }
+ else { $conf = "nmis.conf"; }
+-my $configfile = "$FindBin::Bin/../conf/$conf";
++my $configfile = "/etc/nmis/$conf";
+ if ( -f $configfile ) { loadConfiguration($configfile); }
+ else { die "Can't access configuration file $configfile.\n"; }
+ 
+diff -Naur --exclude '*~' nmis-2-00/cgi-bin/view.pl nmis-2-00-fhs/cgi-bin/view.pl
+--- nmis-2-00/cgi-bin/view.pl	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/cgi-bin/view.pl	2008-10-03 14:28:34.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl
++#!/usr/bin/perl
+ #
+ #    view.pl - NMIS View Tables Program - Network Mangement Information System
+ #    Copyright (C) 2001 Keith Sinclair <keith@sinclair.org.au>
+@@ -18,10 +18,7 @@
+ #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ #
+ #*****************************************************************************
+-# Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+-use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl"; 
++use lib "/usr/share/nmis/lib";
+ 
+ # 
+ #****** Shouldn't be anything else to customise below here *******************
+@@ -41,7 +38,7 @@
+ my $conf;
+ if ( $FORM{file} ne "" ) { $conf = $FORM{file}; }
+ else { $conf = "nmis.conf"; }
+-my $configfile = "$FindBin::Bin/../conf/$conf";
++my $configfile = "/etc/nmis/$conf";
+ if ( -f $configfile ) { loadConfiguration($configfile); }
+ else { die "Can't access configuration file $configfile.\n"; }
+ 
+diff -Naur --exclude '*~' nmis-2-00/conf/nmis-sample.conf nmis-2-00-fhs/conf/nmis-sample.conf
+--- nmis-2-00/conf/nmis-sample.conf	2001-06-23 03:35:28.000000000 +0200
++++ nmis-2-00-fhs/conf/nmis-sample.conf	2008-10-03 14:40:59.000000000 +0200
+@@ -17,14 +17,14 @@
+ #### YOU MIGHT HAVE TO CHANGE THIS IF NOT USING THE DEFAULT DIRECTORIES ######
+ #
+ # Config file Variables
+-<nmis_base>=/usr/local/nmis
+-<nmis_data>=/usr/local/nmis
+-<nmis_bin>=/usr/local/nmis/bin
+-<nmis_cgi>=/usr/local/nmis/cgi-bin
+-<nmis_conf>=/usr/local/nmis/conf
+-<nmis_logs>=/usr/local/nmis/logs
+-<nmis_var>=/usr/local/nmis/var
+-<cgi_url_base>=/cgi-nmis
++<nmis_base>=/usr/share/nmis
++<nmis_data>=/var/lib/nmis
++<nmis_bin>=/usr/share/nmis
++<nmis_cgi>=/var/www/nmis
++<nmis_conf>=/etc/nmis
++<nmis_logs>=/car/log/nmis
++<nmis_var>=/var/lib/nmis
++<cgi_url_base>=/nmis
+ <url_base>=/nmis
+ #
+ #### YOU SHOULDN'T HAVE TO CHANGE ANYTHING ELSE ##############################
