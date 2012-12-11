@@ -98,3 +98,24 @@ rm -rf %{buildroot}
 %{_datadir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}
 
+
+
+%changelog
+* Mon Dec 06 2010 Oden Eriksson <oeriksson@mandriva.com> 2.00-4mdv2011.0
++ Revision: 613101
+- the mass rebuild of 2010.1 packages
+
+* Wed Feb 17 2010 Guillaume Rousse <guillomovitch@mandriva.org> 2.00-3mdv2010.1
++ Revision: 507260
+- rely on filetrigger for reloading apache configuration begining with 2010.1, rpm-helper macros otherwise
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - rebuild
+
+* Sun Oct 12 2008 Guillaume Rousse <guillomovitch@mandriva.org> 2.00-1mdv2009.1
++ Revision: 292962
+- import nmis
+
+
+* Sun Oct 12 2008 Guillaume Rousse <guillomovitch@mandriva.org> 2.00-1mdv2009.1
+- first mdv release
