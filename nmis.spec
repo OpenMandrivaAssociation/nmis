@@ -1,7 +1,7 @@
 %define name	nmis
 %define version 2.00
 %define up_version %(echo %version | sed -e 's/\\./-/')
-%define release: 5
+%define release: 6
 
 Name:		%{name}
 Version:	%{version}
