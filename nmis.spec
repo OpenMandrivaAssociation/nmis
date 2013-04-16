@@ -1,7 +1,7 @@
 %define name	nmis
 %define version 2.00
 %define up_version %(echo %version | sed -e 's/\\./-/')
-%define release %mkrel 4
+%define release: 5
 
 Name:		%{name}
 Version:	%{version}
@@ -78,15 +78,7 @@ EOF
 %clean
 rm -rf %{buildroot}
 
-%post
-%if %mdkversion < 201010
-%_post_webapp
-%endif
 
-%postun
-%if %mdkversion < 201010
-%_postun_webapp
-%endif
 
 %files
 %defattr(-,root,root)
