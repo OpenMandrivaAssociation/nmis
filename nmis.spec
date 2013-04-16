@@ -1,11 +1,8 @@
-%define name	nmis
-%define version 2.00
 %define up_version %(echo %version | sed -e 's/\\./-/')
-%define release: 6
 
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		nmis
+Version:	2.00
+Release:	6
 Summary:	Network Management Information System
 License:	GPL
 Group:		Networking/WWW
@@ -13,12 +10,7 @@ URL:		http://nmis.sourceforge.net/
 Source:     http://www.sins.com.au/public/%{name}-%{up_version}.tar.gz
 Patch0:     %{name}-2.00-fhs.patch
 Patch1:     %{name}-2.00-no-ksh.patch
-%if %mdkversion < 201010
-Requires(post):   rpm-helper
-Requires(postun):   rpm-helper
-%endif
 BuildArch:	noarch
-BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
 NMIS stands for Network Management Information System.  It is a Network
