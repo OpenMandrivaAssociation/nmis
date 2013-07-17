@@ -2,7 +2,7 @@
 
 Name:		nmis
 Version:	2.00
-Release:	6
+Release:	7
 Summary:	Network Management Information System
 License:	GPL
 Group:		Networking/WWW
@@ -25,8 +25,6 @@ Management Functional Areas, those being, Performance, Configuration, Fault.
 %build
 
 %install
-rm -rf %{buildroot}
-
 install -d -m 755 %{buildroot}%{_var}/www/%{name}
 install -m 755 cgi-bin/* %{buildroot}%{_var}/www/%{name}
 
@@ -59,21 +57,14 @@ cat > %{buildroot}%{_webappconfdir}/%{name}.conf <<EOF
 Alias /%{name} %{_var}/www/%{name}
 
 <Directory %{_var}/www/%{name}>
-    Order allow,deny
-    Allow from all
+    Require all granted
     Options ExecCGI
     AddHandler cgi-script .pl
     DirectoryIndex nmiscgi.pl
 </Directory>
 EOF
 
-%clean
-rm -rf %{buildroot}
-
-
-
 %files
-%defattr(-,root,root)
 %doc README gpl.txt changes.txt htdocs/*
 %config(noreplace) %{_webappconfdir}/%{name}.conf
 %{_var}/www/%{name}
