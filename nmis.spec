@@ -2,7 +2,7 @@
 
 Name:		nmis
 Version:	2.00
-Release:	7
+Release:	8
 Summary:	Network Management Information System
 License:	GPL
 Group:		Networking/WWW
