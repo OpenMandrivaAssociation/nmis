@@ -6,7 +6,7 @@ Release:	8
 Summary:	Network Management Information System
 License:	GPL
 Group:		Networking/WWW
-URL:		http://nmis.sourceforge.net/
+URL:		https://nmis.sourceforge.net/
 Source:     http://www.sins.com.au/public/%{name}-%{up_version}.tar.gz
 Patch0:     %{name}-2.00-fhs.patch
 Patch1:     %{name}-2.00-no-ksh.patch
